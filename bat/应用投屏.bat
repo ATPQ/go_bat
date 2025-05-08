@@ -42,6 +42,7 @@ if %errorlevel% equ 0 (
 )
 
 :: 连接新设备
+:connect_devices
 echo 正在连接 ADB: %full_ip%
 .\adb connect %full_ip%
 .\adb devices | findstr "%full_ip%" >nul
@@ -58,4 +59,14 @@ echo 正在启动 scrcpy...
 :exit_adb
 echo 正在断开 ADB 连接...
 .\adb disconnect %full_ip%
-pause
+
+
+choice /c 123 /n /m "请选择：[1]重新连接 [2]输入新地址 [3]退出"
+    if !errorlevel! equ 1 (
+        goto connect_devices
+    )
+	if !errorlevel! equ 2 (
+        goto input_ip
+    )
+
+	
