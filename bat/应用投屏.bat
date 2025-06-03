@@ -31,6 +31,45 @@ if %errorlevel% neq 0 (
     goto input_ip
 )
 
+::↓替换中文字符的支持
+
+:: 检查是否包含“，”或“。”先复制原内容
+set output=%user_input%
+
+:: 初始化标志变量，检测是否有需要替换的字符
+set replaced=0
+
+:: 先检测是否包含“：”
+echo %output% | findstr /C:"：" >nul
+if %errorlevel%==0 (
+    set replaced=1
+    set output=%output:：=:%
+)
+
+:: 进行“，”的替换
+echo %output% | findstr /C:"，" >nul
+if %errorlevel%==0 (
+    set replaced=1
+    set output=%output:，=.%
+)
+
+:: 进行“。”的替换
+echo %output% | findstr /C:"。" >nul
+if %errorlevel%==0 (
+    set replaced=1
+    set output=%output:。=.%
+)
+ 
+:: 如果没有任何替换内容，输出原字符串，否则输出替换后的字符串
+if %replaced%==0 (
+    echo 原字符串：%user_input%
+) else (
+    echo 替换后的字符串：%output%
+)
+
+set "user_input=%output%"
+::↑替换中文字符的支持
+
 :: 智能补全IP
 echo %user_input% | findstr /r "^192\.168\." >nul
 if %errorlevel% equ 0 (
