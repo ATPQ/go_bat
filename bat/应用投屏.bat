@@ -25,7 +25,7 @@ if %device_connected% equ 1 (
 set /p "user_input=请输入IP地址（格式如[192.168.1.100:42424]或缩写[1.100:42424]）: "
 
 :: 格式检查
-echo %user_input% | findstr /r ":" >nul
+echo %user_input% | findstr /r /c:":" /c:"：" >nul
 if %errorlevel% neq 0 (
     echo 错误：必须包含端口号（如 :42424）
     goto input_ip
